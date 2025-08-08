@@ -10,6 +10,7 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ('name', 'email')
     search_fields = ('name', 'email')
     list_filter = ('name',)
+    inlines = [PostInline] # Mostrar posts relacionados al editar un autor
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
