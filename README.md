@@ -11,4 +11,6 @@ Un proyecto base Django para un blog
 
 ## Modelos
 - **Author:** Almacena el nombre y correo del autor (ùnico).
-- **Post:** Almacena el tìtulo, contenido, fecha de publicaciòn, y una relaciòn ForeignKey con Author.
+- **Category:** Nombre de la categorìa.
+- **Post:** Almacena el tìtulo, contenido, fecha, autor (ForeignKey), categorìas (ManyToManyField).
+- **Consultas ORM:** Ejemplos incluyen filtrar posts por author ('Post.objects.filter(author__name="David")'), por fecha ('fecha_publicacion__year=2025'), y combinar condiciones con 'Q'.
