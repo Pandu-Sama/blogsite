@@ -14,3 +14,8 @@ Un proyecto base Django para un blog
 - **Category:** Nombre de la categorìa.
 - **Post:** Almacena el tìtulo, contenido, fecha, autor (ForeignKey), categorìas (ManyToManyField).
 - **Consultas ORM:** Ejemplos incluyen filtrar posts por author ('Post.objects.filter(author__name="David")'), por fecha ('fecha_publicacion__year=2025'), y combinar condiciones con 'Q'.
+
+## Admin
+- **Modelos regitrados:** 'Author', 'Post', 'Category'.
+- **Personalizaciones:** Listado con 'list_display', filtrado con 'list_filter', bùsqueda con 'search_fields', navegaciòn por fechas en 'Post'. Inline para gestionar posts desde 'Author'
+- **Acceso:** '/admin/' con un superusuario.
