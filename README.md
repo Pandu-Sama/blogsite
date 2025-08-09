@@ -19,3 +19,8 @@ Un proyecto base Django para un blog
 - **Modelos regitrados:** 'Author', 'Post', 'Category'.
 - **Personalizaciones:** Listado con 'list_display', filtrado con 'list_filter', bùsqueda con 'search_fields', navegaciòn por fechas en 'Post'. Inline para gestionar posts desde 'Author'
 - **Acceso:** '/admin/' con un superusuario.
+
+## Vistas
+- **FBV:** 'post_list' en 'blog/views.py' lista posts en '/posts/'.
+- **CBV:** 'PostListView' (hereda de 'ListView') lista posts en '/posts/cbv/' con pafinaciòn y tìtulo dinàmico.
+- **Plantillas:** 'blog/templates/post_list.html' muestra la lista de posts.

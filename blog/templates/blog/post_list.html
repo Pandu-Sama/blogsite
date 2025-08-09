@@ -1,0 +1,28 @@
+{% extends 'blog/base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% block content %}
+    <h1>{{ title }}</h1>
+    <ul>
+        {% for post in posts %}
+            <li>
+                <h2>{{ post.titulo }}</h2>
+                <p>{{ post.contenido|truncatewords:30 }}</p>
+                <p>Por {{ post.author.name }} el {{ post.fecha_publicacion|date:"d/m/Y" }}</p>
+                <p>Categorìas: {% for category in post.categories.all %}{{ category.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+            </li>
+        {% empty %}
+            <li>No hay posts disponibles.</li>
+        {% endfor %}
+    </ul>
+    {% if is_paginated %}
+        <div>
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+            {% endif %}
+            <span>Pàgina {{ page.obj.number }} de {{ paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
