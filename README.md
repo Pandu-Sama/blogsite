@@ -24,3 +24,10 @@ Un proyecto base Django para un blog
 - **FBV:** 'post_list' en 'blog/views.py' lista posts en '/posts/'.
 - **CBV:** 'PostListView' (hereda de 'ListView') lista posts en '/posts/cbv/' con pafinaciòn y tìtulo dinàmico.
 - **Plantillas:** 'blog/templates/post_list.html' muestra la lista de posts.
+
+## Rutas 
+- **URLs:** Definidas en 'blog/urls.py' con 'app_name = 'blog''.
+- **Rutas configuradas:**
+  - '/posts/': Lista de posts ('blog:post_list', usa 'PostListView').
+  - '/posts/<pk>': Detalles de un post ('blog:post_datail', usa 'PostDetailView').
+- **Platillas:** 'post_list.html' y 'post_detail.html' en 'blog/template/blog/'.
