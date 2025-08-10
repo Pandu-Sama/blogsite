@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 from .models import Post
 
 def post_list(request):
@@ -17,3 +17,9 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Lista de Posts Recientes'
         return context
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+    context_object_name = 'post'
+
