@@ -31,3 +31,9 @@ Un proyecto base Django para un blog
   - '/posts/': Lista de posts ('blog:post_list', usa 'PostListView').
   - '/posts/<pk>': Detalles de un post ('blog:post_datail', usa 'PostDetailView').
 - **Platillas:** 'post_list.html' y 'post_detail.html' en 'blog/template/blog/'.
+
+## Plantillas 
+- **Base:** 'blog/template/blog/base.html' define el diseño general con bloques 'title' y 'content'.
+- **Lista de posts:** 'post_list.html' hereda de 'base.html', muestra posts con paginaciòn.
+- **Detalles de post:** 'post_detail.html' hereda de 'base.html', muestra un post individual.
+- **Contexto:** Usado para renderizar datos dinàmicos como '{{ post.titulo }}' y '{{ title }}'.
