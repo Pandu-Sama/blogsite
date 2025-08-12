@@ -37,3 +37,8 @@ Un proyecto base Django para un blog
 - **Lista de posts:** 'post_list.html' hereda de 'base.html', muestra posts con paginaciòn.
 - **Detalles de post:** 'post_detail.html' hereda de 'base.html', muestra un post individual.
 - **Contexto:** Usado para renderizar datos dinàmicos como '{{ post.titulo }}' y '{{ title }}'.
+
+## Formularios
+- **Formularios manual:** 'post_form.html' en '/posts/new/' permite crear posts con tìtulo, contenido, autor, y categorìas.
+- **Vista:** 'post_create' (FBV) maneja 'GET' (mostrar formulario) y 'POST' (validar y guardar datos).
+- **Validaciòn:** Manual, verificando tìtulo, contenido, autor, y categorìas con 'request.POST'.
