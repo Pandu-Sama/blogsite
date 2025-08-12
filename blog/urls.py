@@ -6,4 +6,5 @@ urlpatterns = [
     path('', views.post_list, name='post_list'), # FBV
     path('cbv/', views.PostListView.as_view(), name='post_list_cbv'), # CBV
     path('<int:pk>/', views.PostDetailView.as_view(), name='post_detail'),
+    path('new/', views.post_create, name='post_create'),
 ]

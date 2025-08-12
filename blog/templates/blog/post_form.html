@@ -1,0 +1,47 @@
+{% extends 'blog/base.html' %}
+{% block title %}Crear Nuevo Post{% endblock %}
+{% block content %}
+    <h1>Crear Nuevo Post</h1>
+    {% if errors %}
+        <ul style="color: red;">
+            {% for field, error_list in errors.items %}
+                {% for error in error_list %}
+                    <li>{{ field }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="titulo">Tìtulo:</label>
+            <input type="text" id="titulo" name="titulo" value="{{ form_data.titulo|default:'' }}">
+        </div>
+        <div>
+            <label for="contenido">Contenido:</label>
+            <textarea name="contenido" id="contenido">{{ form_data.contenido|default:'' }}</textarea>
+        </div>
+        <div>
+            <label for="author">Autor:</label>
+            <select name="author" id="author">
+                {% for author_id in author %}
+                    <option value="{{ author_id.id }}" {% if author_id.id|stringformat:"s" == form_data.author %}selected{% endif %}>
+                        {{ author_id.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="categories">Categorìas:</label>
+            <select name="categories" id="categories">
+                {% for category in categories %}
+                    <option value="{{ category.id }}" {% if category.id|stringformat:"s" in form_data.categories %}selected{% endif %}>
+                        {{ category.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Crear Post</button>
+    </form>
+    <a href="{% url 'blog:post_list' %}">Volver a la lista</a>
+{% endblock %}

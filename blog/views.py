@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView
-from .models import Post
+from .models import Post, Author, Category
 
 def post_list(request):
     posts = Post.objects.all().order_by('-fecha_publicacion')
@@ -23,3 +23,58 @@ class PostDetailView(DetailView):
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
+def post_create(request):
+    if request.method == 'POST':
+        errors = {}
+        form_data = {
+            'titulo': request.POST.get('titulo', ''),
+            'contenido': request.POST.get('contenido', ''),
+            'author': request.POST.get('author', ''),
+            'categories': request.POST.getlist('categories', []),
+        }
+
+        if not form_data['titulo']:
+            errors.setdefault('titulo', []).append('El tìtulo es obligatorio.')
+        elif len(form_data['titulo']) > 200:
+            errors.setdefault('titulo', []).append('El tìtulo no puede exceder 200 caracteres.')
+
+        if not form_data['contenido']:
+            errors.setdefault('contenido', []).append('El contenido es obligatorio.')
+
+        if not form_data['author']:
+            errors.setdefault('author', []).append('Debe seleccionar un autor.')
+        else:
+            try:
+                Author.objects.get(id=form_data['author'])
+            except Author.DoesNotExist:
+                errors.setdefault('author', []).append('El autor seleccionado no existe.')
+
+        if not form_data['categories']:
+            errors.setdefault('categories', []).append('Debe seleccionar al menos una categoria.')
+        else:
+            for cat_id in form_data['categories']:
+                try:
+                    Category.objects.get(id=cat_id)
+                except Category.DoesNotExist:
+                    errors.setdefault('categories', []).append(f'La categoria con ID {cat_id} no existe.')
+
+        if not  errors:
+            post = Post.objects.create(
+                titulo=form_data['titulo'],
+                contenido=form_data['contenido'],
+                author_id=form_data['author'],
+            )
+            post.categories.set(form_data['categories'])
+            return redirect('blog:post_list')
+
+        return render(request, 'blog/post_form.html', {
+            'errors': errors,
+            'form_data': form_data,
+            'author': Author.objects.all(),
+            'categories': Category.objects.all(),
+        })
+
+    return render(request, 'blog/post_form.html', {
+        'author': Author.objects.all(),
+        'categories': Category.objects.all(),
+    })
