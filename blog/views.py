@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+from .forms import PostForm
 from .models import Post, Author, Category
+from django.urls import reverse_lazy
 
 def post_list(request):
     posts = Post.objects.all().order_by('-fecha_publicacion')
@@ -23,7 +25,22 @@ class PostDetailView(DetailView):
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
+class PostCreateView(CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('blog:post_list')
+
 def post_create(request):
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('blog:post_list')
+    else:
+        form = PostForm()
+    return render(request, 'blog/post_form.html', {'form': form})
+def post_create_manual(request):
     if request.method == 'POST':
         errors = {}
         form_data = {
@@ -67,14 +84,14 @@ def post_create(request):
             post.categories.set(form_data['categories'])
             return redirect('blog:post_list')
 
-        return render(request, 'blog/post_form.html', {
+        return render(request, 'blog/post_form_manual.html', {
             'errors': errors,
             'form_data': form_data,
             'author': Author.objects.all(),
             'categories': Category.objects.all(),
         })
 
-    return render(request, 'blog/post_form.html', {
+    return render(request, 'blog/post_form_manual.html', {
         'author': Author.objects.all(),
         'categories': Category.objects.all(),
     })
