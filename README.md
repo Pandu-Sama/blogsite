@@ -42,3 +42,12 @@ Un proyecto base Django para un blog
 - **Formularios manual:** 'post_form.html' en '/posts/new/' permite crear posts con tìtulo, contenido, autor, y categorìas.
 - **Vista:** 'post_create' (FBV) maneja 'GET' (mostrar formulario) y 'POST' (validar y guardar datos).
 - **Validaciòn:** Manual, verificando tìtulo, contenido, autor, y categorìas con 'request.POST'.
+
+## Formularios con ModelForm
+- **Formulario:** PostForm en 'blog/forms.py' genera un formulario para crear posts basado en el modelo Post.
+- **Vistas:** 
+ - post_create (FBV): Usa PostForm para manejar GET/POST en /posts/new/.
+ - PostCreateView (CBV): Usa CreateView con PostForm en /posts/new/manual/.
+ - Comparando con post_create_manual (formulario manual en /posts/new/manual).
+- **Ventajas:** Validaciòn automàtica, menos còdigo, e integraciòn con el ORM.
+- **Plantillas:** post_form.html ModelForm, post_form_manual.html para el formulario manual.
