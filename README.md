@@ -59,3 +59,8 @@ Un proyecto base Django para un blog
 - **Plantillas:** login.html, logged_out.html, y register.html para autenticaciòn y registro.
 - **Integraciòn:** Los posts se vinculan al Author del usuario autenticado (request.user).
 
+## Mensajes y Feedback en la UI
+- **Framework de mensajes:** Usa 'django.contrib.messages' para mostrar notificaciones de èxito (messages.succes) y (messages.error) en formularios de craciòn de posts, login, y registro.
+- **Plantilla base:** 'base.html' muestra mensajes con estilos CSS para 'success', 'error', 'warnig', e 'info'.
+- **Patròn Post/Redirect/Get:** Implementado en todas las vistas (post_create, PostCreateView, register, CustomLoginView) para evitar envìos duplicados.
+- **Ejemplo:** Crear un por muestra "¡Post creado exitosamente!" en '/posts/'.
