@@ -51,3 +51,11 @@ Un proyecto base Django para un blog
  - Comparando con post_create_manual (formulario manual en /posts/new/manual).
 - **Ventajas:** Validaciòn automàtica, menos còdigo, e integraciòn con el ORM.
 - **Plantillas:** post_form.html ModelForm, post_form_manual.html para el formulario manual.
+
+## Sistema de usuarios
+- **Autenticaciòn:** Usa django.contrib.auth con vistas integradas (LoginView, LogiutView) en /accounts/login/ y /accounts/logout/.
+- **Registro:** Vista personalizada register en /accounts/register/ crea usuarios y asocia un Author.
+- **Restricciones:** @login_required y LoginRequiredMixin protegen las vistas post_create y PostCreateView.
+- **Plantillas:** login.html, logged_out.html, y register.html para autenticaciòn y registro.
+- **Integraciòn:** Los posts se vinculan al Author del usuario autenticado (request.user).
+
