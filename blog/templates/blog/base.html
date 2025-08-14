@@ -38,6 +38,43 @@
         h1 {
             color: #333;
         }
+        .messages {
+            margin: 10px 0;
+            list-style: none;
+            padding: 0;
+        }
+        .messages .success {
+            background-color: #d4edda;
+            color: #155742;
+            padding: 10px;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .messages .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 10px;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .messages .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            padding: 10px;
+            border: 1px solid #bee5eb;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -47,11 +84,26 @@
     <nav>
         <a href="{% url 'blog:post_list' %}">Inicio</a>
         <a href="{% url 'admin:index' %}"> Admin</a>
+        {% if user.is_authenticated %}
+            {% csrf_token %}
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                <button type="submit" style="background: none; border: none; color: #007bff; text-decoration: none; cursor: pointer;"></button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}"> Iniciar sesiòn</a>
+            <a href="{% url 'register' %}"> Registrarme</a>
+        {% endif %}
     </nav>
     <div class="container">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                	<li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
         {% block content %}
         {% endblock %}
     </div>
-
 </body>
 </html>
