@@ -1,0 +1,35 @@
+{% extends 'blog/base.html' %}
+{% block title %}Registrarse{% endblock %}
+{% block content %}
+    <h1>Registrarse</h1>
+    {% if form.errors %}
+    	<ul style="color: red;">
+            {% for field in form %}
+                {% for error in field.errors %}
+            	    <li>{{ field.label }}: {{ error }}</li>
+                {% endfor %}
+            {% endfor %}
+            {% for error in form.non_field_errors %}
+            	<li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            {{ form.username.label_tag }}
+            {{ form.username }}
+        </div>
+        <div>
+            {{ form.password1.label_tag }}
+            {{ form.password1 }}
+        </div>
+        <div>
+            {{ form.password2.label_tag }}
+            {{ form.password2 }}
+        </div>
+        <button type="submit">Registrarse</button>
+    </form>
+    <p><a href="{% url 'login' %}">¿Ya tienes cuenta? Iniciar sesiòn</a></p>
+    <p><a href="{% url 'blog:post_list' %}">Volver a la lista</a></p>
+{% endblock %}

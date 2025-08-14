@@ -1,5 +1,9 @@
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import PostForm
 from .models import Post, Author, Category
 from django.urls import reverse_lazy
@@ -25,17 +29,15 @@ class PostDetailView(DetailView):
     template_name = 'blog/post_detail.html'
     context_object_name = 'post'
 
-class PostCreateView(CreateView):
-    model = Post
-    form_class = PostForm
-    template_name = 'blog/post_form.html'
-    success_url = reverse_lazy('blog:post_list')
-
+@login_required()
 def post_create(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
-            form.save()
+            post = form.save(commit=False)
+            post.author = Author.objects.get(user=request.user)
+            post.save()
+            form.save_m2m()
             return redirect('blog:post_list')
     else:
         form = PostForm()
@@ -95,3 +97,29 @@ def post_create_manual(request):
         'author': Author.objects.all(),
         'categories': Category.objects.all(),
     })
+
+class PostCreateView(LoginRequiredMixin, CreateView):
+    model = Post
+    form_class = PostForm
+    template_name = 'blog/post_form.html'
+    success_url = reverse_lazy('blog:post_list')
+
+    def form_valid(self, form):
+        form.instance.author = Author.objects.get(user=self.request.user)
+        return super().form_valid(form)
+
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            Author.objects.create(
+                user=user,
+                name=user.username,
+                email=user.email or f"{user.username}@example.com",
+            )
+            login(request, user)
+            return redirect('blog:post_list')
+    else:
+        form = UserCreationForm()
+    return render(request, 'blog/register.html', {'form': form})
