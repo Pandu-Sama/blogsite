@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
@@ -160,6 +160,21 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     def form_invalid(self, form):
         messages.error(self.request, 'Por favor corrige los errores en el formulario.')
         return super().form_invalid(form)
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = 'blog/post_confirm_delete.html'
+    success_url = reverse_lazy('blog:post_list')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if obj.author.user != self.request.user:
+            raise Http404("No tienes permisos para eliminar este post.")
+        return obj
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Post {self.get_object().titulo} eliminado exitosamente.')
+        return super().form_valid(form)
 
 
 class CustomLoginView(LoginView):

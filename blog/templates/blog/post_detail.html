@@ -13,6 +13,7 @@
     </p>
     {% if user.is_authenticated and post.author.user == user %}
         <p><a href="{% url 'blog:post_update' post.pk %}">Editar post</a></p>
+        <p><a href="{% url 'blog:post_delete' post.pk %}">Eliminar post</a></p>
     {% endif %}
     <a href="{% url 'blog:post_list' %}">Volver a la lista</a>
 {% endblock %}

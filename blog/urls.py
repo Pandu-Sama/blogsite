@@ -10,4 +10,5 @@ urlpatterns = [
     path('new/cbv/', views.PostCreateView.as_view(), name='post_create_cbv'),
     path('new/manual/', views.post_create_manual, name='post_create_manual'),
     path('<int:pk>/edit/', views.PostUpdateView.as_view(), name='post_update'),
+    path('<int:pk>/delete/', views.PostDeleteView.as_view(), name='post_delete'),
 ]
