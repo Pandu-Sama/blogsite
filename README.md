@@ -64,3 +64,9 @@ Un proyecto base Django para un blog
 - **Plantilla base:** 'base.html' muestra mensajes con estilos CSS para 'success', 'error', 'warnig', e 'info'.
 - **Patròn Post/Redirect/Get:** Implementado en todas las vistas (post_create, PostCreateView, register, CustomLoginView) para evitar envìos duplicados.
 - **Ejemplo:** Crear un por muestra "¡Post creado exitosamente!" en '/posts/'.
+
+## CRUB (Create, Read, Update)
+- **Create:** 'PostCreateView' y 'post_create' usan 'PostForm' para crear posts, restringidos a usuarios autenticados.
+- **Read:** 'PostListView' lista posts con paginaciòn, y 'PostDetailView' muestra detalles.
+- **Update:** 'PostUpdateView' permite editar post con 'UpdateView', restringiendo la ediciòn al autor del post.
+- **Platilla:** 'post_form.html' se reutilza para crear y editar, con mensajes de feedback.
