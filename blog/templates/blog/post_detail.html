@@ -12,11 +12,13 @@
         {% endfor %}
     </p>
     {% if user.is_authenticated %}
-        {% if post.author.user == user or user.is_superuser%}
+        {% if post.author.user == user or perms.blog.change_post or user.is_superuser %}
         	<p><a href="{% url 'blog:post_update' post.pk %}">Editar post</a></p>
             <p><a href="{% url 'blog:post_delete' post.pk %}">Eliminar post</a></p>
             {% if user.is_superuser %}
                 <p><strong>Nota:</strong> Como superusuario, puedes editar o eliminar cualquier post.</p>
+            {% elif perms.blog.change_post %}
+                <p><strong>Nota:</strong> Como editor, puedes editar o eliminar este post</p>
             {% endif %}
         {% endif %}
     {% endif %}

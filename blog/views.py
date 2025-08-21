@@ -3,13 +3,15 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.http import Http404
 from .forms import PostForm
 from .models import Post, Author, Category
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 
 
 
@@ -43,6 +45,11 @@ def post_create(request):
             post.author = Author.objects.get(user=request.user)
             post.save()
             form.save_m2m()
+
+            content_type = ContentType.objects.get_for_model(Post)
+            change_permission = Permission.objects.get(content_type=content_type, codename='change_post')
+            delete_permission = Permission.objects.get(content_type=content_type, codename='delete_post')
+            request.user.user_permissions.add(change_permission, delete_permission)
             messages.success(request, f'¡Post "{post.titulo}" creado exitosamente.')
             return redirect('blog:post_list')
         else:
@@ -92,6 +99,10 @@ def post_create_manual(request):
                 author_id=form_data['author'],
             )
             post.categories.set(form_data['categories'])
+            content_type = ContentType.objects.get_for_model(Post)
+            change_permission = Permission.objects.get(content_type=content_type, codename='change_post')
+            delete_permission = Permission.objects.get(content_type=content_type, codename='delete_post')
+            request.user.user_permissions.add(change_permission, delete_permission)
             messages.success(request, f'Post "{post.titulo}" creado exitosamente.')
             return redirect('blog:post_list')
         messages.error(request, 'Por favor corrige los errores en el formulario.')
@@ -115,6 +126,11 @@ class PostCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = Author.objects.get(user=self.request.user)
+        form.save()
+        content_type = ContentType.objects.get_for_model(Post)
+        change_permission = Permission.objects.get(content_type=content_type, codename='change_post')
+        delete_permission = Permission.objects.get(content_type=content_type, codename='delete_post')
+        request.user.user_permissions.add(change_permission, delete_permission)
         messages.success(self.request, f'Post "{form.instance.titulo}" creado exitosamente.')
         return super().form_valid(form)
 
@@ -141,15 +157,16 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'blog/register.html', {'form': form})
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = 'blog/post_form.html'
     success_url = reverse_lazy('blog:post_list')
+    permission_required = 'blog.change_post'
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        if not self.request.user.is_superuser and obj.author.user != self.request.user:
+        if not self.request.user.has_perm('blog.change_post') and obj.author.user != self.request.user:
             raise Http404("No tienes permisos para editar este post.")
         return obj
 
@@ -165,10 +182,11 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'blog/post_confirm_delete.html'
     success_url = reverse_lazy('blog:post_list')
+    permission_required = 'blog.delete_post'
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        if not self.request.user.is_superuser and obj.author.user != self.request.user:
+        if not self.request.user.has_perm('blog.delete_post') and obj.author.user != self.request.user:
             raise Http404("No tienes permisos para eliminar este post.")
         return obj
 
