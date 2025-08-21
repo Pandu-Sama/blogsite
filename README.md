@@ -74,6 +74,8 @@ Un proyecto base Django para un blog
 
 ## Permisos y Acceso
 - **Permisos integrados:** Usa 'is_authenticated' para restringir vistas con 'LoginRequiredMixin' y '@login_required', redirigiendo a '/accounts/login/'.
+- **PermissionRequiredMixin:** Protege 'PostUpdateView' (blog.change_post) y 'PostDeleteView' (blog.delete_post), asegurando que solo usuarios con permisos especìficos accedas
+- **Asignaciòn de permisos:** Los autores reciben 'blog.change_post' y blog.delete_post al crear posts; el grupo "Editores" tiene permisos globales asignados via admin.
 - **Superusuarios:** 'is_superuser' permite a superusuarios editar/eliminar cualquier post en 'PostUpdateView' y 'PostDeleteView'.
-- **Restriciòn al autor:** 'get_object' verifica que 'post.author.user == request.user' o 'request.user.is_superuser', lanzando Http404 si no cumple.
-- **Plantillas:** 'post_detail.html' muestra enlaces de ediciòn/eliminaciòn solo para autores o superusuarios, con un mensaje para superusuarios. 
+- **Restriciòn al autor:** 'get_object' verifica que 'post.author.user == request.user' o 'request.user.is_superuser', como respaldo si no hay permisos globales, lanzando Http404 si no cumple.
+- **Plantillas:** 'post_detail.html' muestra enlaces de ediciòn/eliminaciòn para autores, editores, o superusuarios, con notas segùn su rol. 
