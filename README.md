@@ -71,3 +71,9 @@ Un proyecto base Django para un blog
 - **Update:** 'PostUpdateView' permite editar post con 'UpdateView', restringiendo la ediciòn al autor del post.
 - **Delete:** 'PostDeleteView' usa 'DeleteView' para eliminar posts, con confirmaciòn en 'post_confirm_delete.html' y restricciones al autor.
 - **Platilla:** 'post_form.html' se reutilza para crear y editar, con mensajes de feedback.
+
+## Permisos y Acceso
+- **Permisos integrados:** Usa 'is_authenticated' para restringir vistas con 'LoginRequiredMixin' y '@login_required', redirigiendo a '/accounts/login/'.
+- **Superusuarios:** 'is_superuser' permite a superusuarios editar/eliminar cualquier post en 'PostUpdateView' y 'PostDeleteView'.
+- **Restriciòn al autor:** 'get_object' verifica que 'post.author.user == request.user' o 'request.user.is_superuser', lanzando Http404 si no cumple.
+- **Plantillas:** 'post_detail.html' muestra enlaces de ediciòn/eliminaciòn solo para autores o superusuarios, con un mensaje para superusuarios. 
