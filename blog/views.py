@@ -149,7 +149,7 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        if obj.author.user != self.request.user:
+        if not self.request.user.is_superuser and obj.author.user != self.request.user:
             raise Http404("No tienes permisos para editar este post.")
         return obj
 
@@ -168,7 +168,7 @@ class PostDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
-        if obj.author.user != self.request.user:
+        if not self.request.user.is_superuser and obj.author.user != self.request.user:
             raise Http404("No tienes permisos para eliminar este post.")
         return obj
 

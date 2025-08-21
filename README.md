@@ -69,4 +69,5 @@ Un proyecto base Django para un blog
 - **Create:** 'PostCreateView' y 'post_create' usan 'PostForm' para crear posts, restringidos a usuarios autenticados.
 - **Read:** 'PostListView' lista posts con paginaciòn, y 'PostDetailView' muestra detalles.
 - **Update:** 'PostUpdateView' permite editar post con 'UpdateView', restringiendo la ediciòn al autor del post.
+- **Delete:** 'PostDeleteView' usa 'DeleteView' para eliminar posts, con confirmaciòn en 'post_confirm_delete.html' y restricciones al autor.
 - **Platilla:** 'post_form.html' se reutilza para crear y editar, con mensajes de feedback.
